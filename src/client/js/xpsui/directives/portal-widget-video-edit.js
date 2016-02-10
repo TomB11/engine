@@ -9,7 +9,7 @@
 				data: '=xpsuiPortalWidgetVideoEdit',
 				index: '='
 			},
-			require: ['^xpsuiPortalArticleContentEdit'],
+			require: ['^xpsuiPortalArticleContentEdit', '^ngModel'],
 			link: function(scope, elm, attrs, ctrls) {
 				log.group('portal-widget-video-edit Link');
 
@@ -23,7 +23,7 @@
 						+'<div style="background-color: white; padding-top: 10px; padding-bottom: 10px;">'
 						+' <div class="form-group row">'
 						+'  <label class="col-sm-2 control-label">Video embed URL:</label>'
-						+'  <div class="col-sm-4"><div class="input-group"><input ng-model="data.data.src"/></div></div>'
+						+'  <div class="col-sm-4"><div class="input-group"><input ng-model="data.data.src" ng-change="changeUrlVideoInWidget()"/></div></div>'
 						+' </div>'
 						+' <div class="form-group row">'
 						+'  <label class="col-sm-2 control-label">Title:</label>'
@@ -39,13 +39,23 @@
 						+' </div>'
 						+'</div>'
 						+'</fieldset>'
-						+'</form>');
+						+'</form>'
+					);
 
 				elm.append(titleBar);
 				elm.append(content);
 
 				$compile(titleBar)(scope);
 				$compile(content)(scope);
+
+				scope.changeUrlVideoInWidget = function() {
+					console.log('firstURL= ' +  scope.data.data.src);
+
+					var fixURL = scope.data.data.src;
+					scope.data.data.src = fixURL.replace("watch?v=", "embed/");
+
+					console.log('secondURL= ' +  scope.data.data.src);
+				};
 
 				scope.moveUp = function() {
 					ctrls[0].moveUp(scope.index);
